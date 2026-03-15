@@ -50,6 +50,7 @@ app.post('/api/login', async (req, res) => {
         return res.status(400).json({ error: 'Invalid credentials' });
     }
     
+    console.log(`User found. Hash in DB: ${user.password}`);
     const validPassword = bcrypt.compareSync(password, user.password);
     console.log(`Password valid: ${validPassword}`);
     
