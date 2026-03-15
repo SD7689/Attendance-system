@@ -27,6 +27,18 @@ app.get('/api/test-hash', (req, res) => {
     res.json({ password: 'admin123', hash: hash });
 });
 
+// RESET ENDPOINT: Force update admin in DB to admin123
+app.get('/api/reset-admin', async (req, res) => {
+    try {
+        const hash = bcrypt.hashSync('admin123', 10);
+        const { error } = await supabase.from('users').update({ password: hash }).eq('username', 'admin');
+        if (error) throw error;
+        res.json({ success: true, message: 'Admin password reset to: admin123' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 const auth = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'Access denied' });
