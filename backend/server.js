@@ -21,6 +21,12 @@ app.get('/', (req, res) => {
     res.json({ status: 'AttendX API is live', timestamp: new Date().toISOString() });
 });
 
+// TEST ENDPOINT: Generate a valid hash for admin123
+app.get('/api/test-hash', (req, res) => {
+    const hash = bcrypt.hashSync('admin123', 10);
+    res.json({ password: 'admin123', hash: hash });
+});
+
 const auth = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'Access denied' });
