@@ -21,24 +21,6 @@ app.get('/', (req, res) => {
     res.json({ status: 'AttendX API is live', timestamp: new Date().toISOString() });
 });
 
-// TEST ENDPOINT: Generate a valid hash for admin123
-app.get('/api/test-hash', (req, res) => {
-    const hash = bcrypt.hashSync('admin123', 10);
-    res.json({ password: 'admin123', hash: hash });
-});
-
-// RESET ENDPOINT: Force update admin in DB to admin123
-app.get('/api/reset-admin', async (req, res) => {
-    try {
-        const hash = bcrypt.hashSync('admin123', 10);
-        const { error } = await supabase.from('users').update({ password: hash }).eq('username', 'admin');
-        if (error) throw error;
-        res.json({ success: true, message: 'Admin password reset to: admin123' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
 const auth = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'Access denied' });
@@ -59,18 +41,14 @@ const employerAuth = (req, res, next) => {
 // --- AUTH --- //
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
-    console.log(`Login attempt for: ${username}`);
     
     const { data: user, error } = await supabase.from('users').select('*').eq('username', username).single();
     
     if (error || !user) {
-        console.error(`User not found: ${username}`, error);
         return res.status(400).json({ error: 'Invalid credentials' });
     }
     
-    console.log(`User found. Hash in DB: ${user.password}`);
     const validPassword = bcrypt.compareSync(password, user.password);
-    console.log(`Password valid: ${validPassword}`);
     
     if (!validPassword) return res.status(400).json({ error: 'Invalid credentials' });
     
