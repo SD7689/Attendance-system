@@ -1,0 +1,41 @@
+{
+  "name": "AttendX Enterprise HQ",
+  "short_name": "AttendX",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#4F46E5",
+  "description": "Enterprise Employee Attendance, Payroll & Workforce Analytics",
+  "orientation": "any",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Clock In",
+      "short_name": "Clock In",
+      "url": "/employee",
+      "description": "Quick clock in with GPS"
+    },
+    {
+      "name": "Analytics",
+      "short_name": "Analytics",
+      "url": "/employer/analytics",
+      "description": "View workforce analytics"
+    }
+  ]
+}
