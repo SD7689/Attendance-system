@@ -41,10 +41,18 @@ const employerAuth = (req, res, next) => {
 // --- AUTH --- //
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
+    console.log(`Login attempt for: ${username}`);
+    
     const { data: user, error } = await supabase.from('users').select('*').eq('username', username).single();
-    if (error || !user) return res.status(400).json({ error: 'Invalid credentials' });
+    
+    if (error || !user) {
+        console.error(`User not found: ${username}`, error);
+        return res.status(400).json({ error: 'Invalid credentials' });
+    }
     
     const validPassword = bcrypt.compareSync(password, user.password);
+    console.log(`Password valid: ${validPassword}`);
+    
     if (!validPassword) return res.status(400).json({ error: 'Invalid credentials' });
     
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
