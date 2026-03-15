@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Printer, ArrowLeft, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import API_URL from '../config';
 
 export default function SalarySlip() {
   const { userId, month } = useParams();
@@ -17,7 +18,7 @@ export default function SalarySlip() {
   const fetchSalary = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`http://localhost:5000/api/salary/${userId}?month=${month}`, {
+      const res = await axios.get(`${API_URL}/api/salary/${userId}?month=${month}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setData(res.data);

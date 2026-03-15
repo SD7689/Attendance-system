@@ -8,6 +8,7 @@ import {
   AreaChart, Area, CartesianGrid,
   RadialBarChart, RadialBar
 } from 'recharts';
+import API_URL from '../config';
 
 const COLORS = {
   present: '#10B981',
@@ -58,14 +59,14 @@ export default function Analytics() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/employees', { headers });
+      const res = await axios.get(`${API_URL}/api/employees`, { headers });
       setEmployees(res.data);
     } catch (err) { console.error(err); }
   };
 
   const fetchAttendance = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/attendance?month=${month}`, { headers });
+      const res = await axios.get(`${API_URL}/api/attendance?month=${month}`, { headers });
       setAttendance(res.data);
     } catch (err) { console.error(err); }
   };

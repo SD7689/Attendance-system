@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Calendar, Receipt, BadgeAlert, CheckCircle, Clock, MapPin, Send } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import { useNavigate } from 'react-router-dom';
+import API_URL from '../config';
 
 export default function EmployeeDashboard() {
   const [attendance, setAttendance] = useState([]);
@@ -22,7 +23,7 @@ export default function EmployeeDashboard() {
 
   const fetchMyAttendance = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/attendance?month=${month}`, { headers });
+      const res = await axios.get(`${API_URL}/api/attendance?month=${month}`, { headers });
       setAttendance(res.data);
     } catch (err) {
       console.error(err);
@@ -42,7 +43,7 @@ export default function EmployeeDashboard() {
   const handleClockIn = async () => {
     try {
       const loc = await requestGeolocation();
-      await axios.post('http://localhost:5000/api/clock-in', { clockInLocation: loc }, { headers });
+      await axios.post(`${API_URL}/api/clock-in`, { clockInLocation: loc }, { headers });
       fetchMyAttendance();
       alert('Success! Clock In Recorded.');
     } catch (err) { alert('Failed to clock in.'); }
@@ -52,7 +53,7 @@ export default function EmployeeDashboard() {
     try {
       const loc = await requestGeolocation();
       const today = new Date().toISOString().split('T')[0];
-      await axios.post('http://localhost:5000/api/clock-out', { clockOutLocation: loc, date: today }, { headers });
+      await axios.post(`${API_URL}/api/clock-out`, { clockOutLocation: loc, date: today }, { headers });
       fetchMyAttendance();
       alert('Success! Clock Out Recorded.');
     } catch (err) { alert('Failed to clock out.'); }
@@ -61,7 +62,7 @@ export default function EmployeeDashboard() {
   const handleLeaveSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/leaves', leaveForm, { headers });
+      await axios.post(`${API_URL}/api/leaves`, leaveForm, { headers });
       setLeaveModal(false);
       alert('Leave requested! Pending employer approval.');
       setLeaveForm({ startDate: '', endDate: '', reason: '' });

@@ -4,6 +4,7 @@ import { Users, CheckCircle, XCircle, Zap, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import GeoLocationCard from '../components/GeoLocationCard';
+import API_URL from '../config';
 
 export default function EmployerIndex() {
   const [employees, setEmployees] = useState([]);
@@ -27,7 +28,7 @@ export default function EmployerIndex() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/employees', { headers });
+      const res = await axios.get(`${API_URL}/api/employees`, { headers });
       setEmployees(res.data);
     } catch (err) { console.error(err); }
   };
@@ -35,28 +36,28 @@ export default function EmployerIndex() {
   const fetchAttendance = async () => {
     try {
       const month = date.slice(0, 7);
-      const res = await axios.get(`http://localhost:5000/api/attendance?month=${month}`, { headers });
+      const res = await axios.get(`${API_URL}/api/attendance?month=${month}`, { headers });
       setAttendance(res.data); // We store whole month for charts
     } catch (err) { console.error(err); }
   };
 
   const fetchLeaves = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/leaves', { headers });
+      const res = await axios.get(`${API_URL}/api/leaves`, { headers });
       setLeaves(res.data);
     } catch (err) { console.error(err); }
   };
 
   const markAttendance = async (userId, targetStatus, loginTime, logoutTime) => {
     try {
-      await axios.post('http://localhost:5000/api/attendance', { userId, date, status: targetStatus, loginTime, logoutTime }, { headers });
+      await axios.post(`${API_URL}/api/attendance`, { userId, date, status: targetStatus, loginTime, logoutTime }, { headers });
       fetchAttendance();
     } catch (err) { alert('Failed to mark attendance'); }
   };
 
   const markAllPresent = async () => {
     try {
-      await axios.post('http://localhost:5000/api/attendance/bulk', { date, status: 'Present' }, { headers });
+      await axios.post(`${API_URL}/api/attendance/bulk`, { date, status: 'Present' }, { headers });
       fetchAttendance();
       alert('All employees marked as Present for ' + date);
     } catch (err) { alert('Bulk update failed'); }
@@ -64,7 +65,7 @@ export default function EmployerIndex() {
 
   const handleLeave = async (id, status, userId, startDate) => {
     try {
-      await axios.put(`http://localhost:5000/api/leaves/${id}`, { status, userId, startDate }, { headers });
+      await axios.put(`${API_URL}/api/leaves/${id}`, { status, userId, startDate }, { headers });
       fetchLeaves();
       fetchAttendance();
     } catch (err) { alert('Failed to alter leave status'); }

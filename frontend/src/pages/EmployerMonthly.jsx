@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Calendar, Save } from 'lucide-react';
 import { motion } from 'framer-motion';
+import API_URL from '../config';
 
 export default function EmployerMonthly() {
   const [employees, setEmployees] = useState([]);
@@ -23,7 +24,7 @@ export default function EmployerMonthly() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/employees', { headers });
+      const res = await axios.get(`${API_URL}/api/employees`, { headers });
       setEmployees(res.data);
       if (res.data.length > 0) setSelectedEmp(res.data[0].id);
     } catch (err) {
@@ -33,7 +34,7 @@ export default function EmployerMonthly() {
 
   const fetchAttendance = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/attendance?month=${month}`, { headers });
+      const res = await axios.get(`${API_URL}/api/attendance?month=${month}`, { headers });
       // Filter for the selected employee only
       setAttendance(res.data.filter(a => a.userId === parseInt(selectedEmp)));
     } catch (err) {
@@ -44,7 +45,7 @@ export default function EmployerMonthly() {
   const markAttendance = async (date, targetStatus, loginTime, logoutTime) => {
     if (!selectedEmp) return;
     try {
-      await axios.post('http://localhost:5000/api/attendance', { 
+      await axios.post(`${API_URL}/api/attendance`, { 
         userId: parseInt(selectedEmp), 
         date, 
         status: targetStatus, 

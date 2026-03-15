@@ -3,6 +3,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Plus, Receipt, DownloadCloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import API_URL from '../config';
 
 export default function ManageEmployees() {
   const [employees, setEmployees] = useState([]);
@@ -15,7 +16,7 @@ export default function ManageEmployees() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/employees', {
+      const res = await axios.get(`${API_URL}/api/employees`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEmployees(res.data);
@@ -37,7 +38,7 @@ export default function ManageEmployees() {
         if (field.key && field.value) customData[field.key] = field.value;
       });
 
-      await axios.post('http://localhost:5000/api/employees', { ...newEmp, customData }, {
+      await axios.post(`${API_URL}/api/employees`, { ...newEmp, customData }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowModal(false);
@@ -72,7 +73,7 @@ export default function ManageEmployees() {
       // We manually aggregate each user's salary payload, in a real env the backend does this in one SQL jump!
       for (const emp of employees) {
          try {
-           const res = await axios.get(`http://localhost:5000/api/salary/${emp.id}?month=${month}`, { headers: { Authorization: `Bearer ${token}` }});
+           const res = await axios.get(`${API_URL}/api/salary/${emp.id}?month=${month}`, { headers: { Authorization: `Bearer ${token}` }});
            const d = res.data;
            csvStr += `${emp.id},"${emp.name}",${emp.baseSalary},${d.attendanceStats.presentDays},${d.attendanceStats.absentDays},${d.calculation.overtimePay},${d.calculation.shortDeduction},${d.calculation.netSalary}\n`;
          } catch(e) {}

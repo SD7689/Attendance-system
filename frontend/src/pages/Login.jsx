@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, User } from 'lucide-react';
 import axios from 'axios';
+import API_URL from '../config';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -16,7 +17,7 @@ export default function Login() {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post('http://localhost:5000/api/login', { username, password });
+      const res = await axios.post(`${API_URL}/api/login`, { username, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       
