@@ -14,7 +14,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const JWT_SECRET = 'supersecret_attendance_key_123';
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecret_attendance_key_123';
+
+// Health check route
+app.get('/', (req, res) => {
+    res.json({ status: 'AttendX API is live', timestamp: new Date().toISOString() });
+});
 
 const auth = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
