@@ -5,7 +5,13 @@ const bcrypt = require('bcryptjs');
 const supabase = require('./database');
 
 const app = express();
-app.use(cors());
+
+// Explicit CORS configuration for production
+app.use(cors({
+    origin: '*', // For now, we'll allow all. But you should change this to your static site URL once deployed!
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 const JWT_SECRET = 'supersecret_attendance_key_123';
